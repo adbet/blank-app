@@ -1,14 +1,16 @@
+
 import requests
 import pandas as pd
 import numpy as np
-import talib
+import pandas_ta as ta
 from telegram import Bot
 import streamlit as st
+import os
 
 # API Keys
-LUNARCRUSH_API_KEY = "your_lunarcrush_api_key"
-TELEGRAM_TOKEN = "your_telegram_bot_token"
-TELEGRAM_CHAT_ID = "your_chat_id"
+LUNARCRUSH_API_KEY = os.getenv("LUNARCRUSH_API_KEY")
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 # LunarCrush API URL
 LUNARCRUSH_API = "https://api.lunarcrush.com/v2"
@@ -43,15 +45,21 @@ def fetch_market_data():
         return []
 
 def apply_technical_analysis(prices):
-    """Apply RSI and MACD on price data."""
+    """Apply RSI and MACD on price data using pandas_ta."""
     if len(prices) < 26:  # Ensure enough data points for MACD
         return {"rsi": None, "macd_diff": None}
-    prices_array = np.array(prices)
-    rsi = talib.RSI(prices_array, timeperiod=14)
-    macd, macd_signal, _ = talib.MACD(prices_array, fastperiod=12, slowperiod=26, signalperiod=9)
+    
+    prices_series = pd.Series(prices)
+    
+    # Calculate RSI (Relative Strength Index)
+    rsi = ta.rsi(prices_series, length=14)
+    
+    # Calculate MACD (Moving Average Convergence Divergence)
+    macd = ta.macd(prices_series, fast=12, slow=26, signal=9)
+    
     return {
-        "rsi": rsi[-1] if len(rsi) > 0 else None,
-        "macd_diff": macd[-1] - macd_signal[-1] if len(macd) > 0 and len(macd_signal) > 0 else None,
+        "rsi": rsi.iloc[-1] if not rsi.empty else None,
+        "macd_diff": macd["MACD"].iloc[-1] - macd["MACDs"].iloc[-1] if not macd.empty else None,
     }
 
 def analyze_coins():
