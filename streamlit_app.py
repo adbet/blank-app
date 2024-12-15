@@ -2,7 +2,6 @@
 import requests
 import pandas as pd
 import numpy as np
-npNaN = np.nan
 import pandas_ta as ta
 from telegram import Bot
 import streamlit as st
