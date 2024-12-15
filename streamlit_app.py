@@ -2,7 +2,7 @@
 import requests
 import pandas as pd
 import numpy as np
-import pandas_ta as ta
+from finta import TA
 from telegram import Bot
 import streamlit as st
 import os
