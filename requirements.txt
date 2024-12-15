@@ -1,6 +1,6 @@
+numpy>=1.23.0
+pandas_ta
 streamlit
 requests
 pandas
-numpy
-pandas_ta
 telegram
