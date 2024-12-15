@@ -2,5 +2,5 @@ streamlit
 requests
 pandas
 numpy
-ta-lib
+pandas_ta
 telegram
