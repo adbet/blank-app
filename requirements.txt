@@ -1,5 +1,5 @@
 numpy>=1.23.0
-finta
+panda_ta
 streamlit
 requests
 pandas
